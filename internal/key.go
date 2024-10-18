@@ -17,10 +17,6 @@ type CryptographicDevice interface {
 	GetKey() (*CryptographicKey, error)
 }
 
-func (p CryptographicKey) IsSymmetric() bool {
-	return p.isSymmetric
-}
-
 // returns (private-key, public-key) or (shared-secret, nil) for symetric algorithms
 func (p CryptographicKey) ToPEM() ([]byte, []byte) {
 
@@ -39,4 +35,16 @@ func (p CryptographicKey) ToPEM() ([]byte, []byte) {
 	})
 
 	return privateKeyPEM, publicKeyPEM
+}
+
+func (p CryptographicKey) IsSymmetric() bool {
+	return p.isSymmetric
+}
+
+func (p CryptographicKey) GetPublicRaw() []byte {
+	return p.public
+}
+
+func (p CryptographicKey) GetPrivateRaw() []byte {
+	return p.private
 }
