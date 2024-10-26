@@ -7,7 +7,10 @@ import (
 	"testing"
 )
 
-var TEST_PAYLOAD = []byte("TESTING IT")
+var (
+	TEST_PAYLOAD        = []byte("TESTING IT")
+	TEST_RSA_KEY_LENGTH = 2048
+)
 
 func ENCRYPT_DECRYPT_COMPARE(t *testing.T, device crypto.CryptographicDevice, payload string) {
 
@@ -34,7 +37,7 @@ func ENCRYPT_DECRYPT_COMPARE(t *testing.T, device crypto.CryptographicDevice, pa
 
 func TestRsaEncryptionDevice(t *testing.T) {
 
-	device, err := crypto.RSA_CreateDeviceRandom()
+	device, err := crypto.RSA_CreateDeviceRandom(TEST_RSA_KEY_LENGTH)
 	if err != nil {
 		t.Errorf("recieved error generating keys: %s", err.Error())
 	}
@@ -44,7 +47,7 @@ func TestRsaEncryptionDevice(t *testing.T) {
 }
 
 func TestRsaPemKey_Export(t *testing.T) {
-	device, err := crypto.RSA_CreateDeviceRandom()
+	device, err := crypto.RSA_CreateDeviceRandom(TEST_RSA_KEY_LENGTH)
 	if err != nil {
 		t.Errorf("recieved error generating keys: %s", err.Error())
 	}

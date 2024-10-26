@@ -8,7 +8,7 @@ import (
 )
 
 func TestEncryptingKeyWithKey(t *testing.T) {
-	device, err := crypto.RSA_CreateDeviceRandom()
+	device, err := crypto.RSA_CreateDeviceRandom(TEST_RSA_KEY_LENGTH)
 	if err != nil {
 		t.Errorf("recieved error generating keys: %s", err.Error())
 	}

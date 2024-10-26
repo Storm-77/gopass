@@ -13,7 +13,7 @@ type RsaCryptographicDevice struct {
 	publicKey  *rsa.PublicKey
 }
 
-func (p RsaCryptographicDevice) Encrypt(payload []byte) ([]byte, error) {
+func (p *RsaCryptographicDevice) Encrypt(payload []byte) ([]byte, error) {
 
 	var publicKey *rsa.PublicKey = p.publicKey
 	if publicKey == nil {
@@ -29,7 +29,7 @@ func (p RsaCryptographicDevice) Encrypt(payload []byte) ([]byte, error) {
 	return encryptedPayload, nil
 }
 
-func (p RsaCryptographicDevice) Decrypt(encrypted_payload []byte) ([]byte, error) {
+func (p *RsaCryptographicDevice) Decrypt(encrypted_payload []byte) ([]byte, error) {
 
 	if p.privateKey == nil {
 		return nil, errors.New("This encryption device cannot decrypt a message, it has no private key")
@@ -43,7 +43,7 @@ func (p RsaCryptographicDevice) Decrypt(encrypted_payload []byte) ([]byte, error
 	return plaintext, nil
 }
 
-func (p RsaCryptographicDevice) GetKey() (*CryptographicKey, error) {
+func (p *RsaCryptographicDevice) GetKey() (*CryptographicKey, error) {
 	// handle scenerio when there is no privateKey to export
 	var privateKeyBytes []byte = nil
 	var publicKey = p.publicKey
@@ -67,8 +67,8 @@ func (p RsaCryptographicDevice) GetKey() (*CryptographicKey, error) {
 	}, nil
 }
 
-func RSA_CreateDeviceRandom() (*RsaCryptographicDevice, error) {
-	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
+func RSA_CreateDeviceRandom(keylength_bits int) (*RsaCryptographicDevice, error) {
+	privateKey, err := rsa.GenerateKey(rand.Reader, keylength_bits)
 	if err != nil {
 		return nil, err
 	}
