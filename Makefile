@@ -5,4 +5,4 @@ run:
 	go run ./cmd/pass/main.go
 
 test:
-	go test ./tests -v
+	go test ./tests -v | grcat .grc/conf.gotest
