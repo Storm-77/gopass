@@ -1,0 +1,5 @@
+
+# Passed tests
+regexp=(PASS|PASSED)
+colours=green, bold green
+count=more

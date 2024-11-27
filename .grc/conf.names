@@ -1,0 +1,5 @@
+
+# Test names or descriptions
+regexp=\sTest\w*\s
+colours=blue, bold blue
+count=more

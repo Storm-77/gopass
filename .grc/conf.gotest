@@ -1,29 +1,4 @@
 
-# Skipped tests
-regexp=(SKIP|SKIPPED)
-colours=cyan, bold cyan
-count=more
-
-# Test names or descriptions
-regexp=^(Test|Scenario|Given|When|Then)
-colours=blue, bold blue
-count=more
-
-# Error messages
-regexp=(ERROR|EXCEPTION)
-colours=magenta, bold magenta
-count=more
-
-# Stack traces or debug info
-regexp=(at|in|on line)
-colours=yellow, bold yellow
-count=more
-
-# Passed tests
-regexp=(PASS|PASSED)
-colours=green, bold green
-count=more
-
 # Failed tests
 regexp=(FAIL|FAILURE|FAILED)
 colours=red, bold red

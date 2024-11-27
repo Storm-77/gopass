@@ -1,0 +1,5 @@
+
+# Stack traces or debug info
+regexp=\d+(\.\d+)?s
+colours=yellow, bold yellow
+count=more

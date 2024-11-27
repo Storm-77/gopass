@@ -1,0 +1,5 @@
+
+# Skipped tests
+regexp=(SKIP|SKIPPED)
+colours=cyan, bold cyan
+count=more
