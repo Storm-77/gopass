@@ -56,7 +56,7 @@ func (p AesCryptographicDevice) Decrypt(ciphertext []byte) ([]byte, error) {
 	return plaintext, nil
 }
 
-func (p AesCryptographicDevice) GetKey() (*CryptographicKey, error) {
+func (p *AesCryptographicDevice) GetKey() (*CryptographicKey, error) {
 
 	return &CryptographicKey{
 		public:      nil,
@@ -88,4 +88,3 @@ func AES_CreateDeviceFromPEM(pemString []byte) (*AesCryptographicDevice, error) 
 	}, nil
 
 }
-
