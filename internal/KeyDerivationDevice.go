@@ -11,7 +11,12 @@ type DerivedKey interface {
 	GetBytes() []byte
 }
 
+type KeyDerivationDeviceParams interface {
+	ToStringRepresentation() (string, error)
+}
+
 type KeyDerivationDevice interface {
 	DeriveKey(passphrase string) (DerivedKey, error)
 	VerifyPassphrase(passphrase string, reference string) (bool, error)
+	Configuration() (KeyDerivationDeviceParams)
 }

@@ -44,7 +44,7 @@ func (p *RsaCryptographicDevice) Decrypt(encrypted_payload []byte) ([]byte, erro
 }
 
 func (p *RsaCryptographicDevice) GetKey() (*CryptographicKey, error) {
-	// handle scenerio when there is no privateKey to export
+	// handle scenario when there is no privateKey to export
 	var privateKeyBytes []byte = nil
 	var publicKey = p.publicKey
 
@@ -77,7 +77,7 @@ func RSA_CreateDeviceRandom(keylength_bits int) (*RsaCryptographicDevice, error)
 	}, nil
 }
 
-// can accept nil as privateKey, then only pulic is parsed. If privateKey is supplied the other argument is ignored
+// can accept nil as privateKey, then only public is parsed. If privateKey is supplied the other argument is ignored
 func RSA_CreateDeviceFromPEM(privatePEM []byte, publicPEM []byte) (*RsaCryptographicDevice, error) {
 
 	if privatePEM != nil { // in case there is privateKey, ignore public key PEM and derive it from private
@@ -100,7 +100,7 @@ func RSA_CreateDeviceFromPEM(privatePEM []byte, publicPEM []byte) (*RsaCryptogra
 	// incase there is no private key, just parse public
 	publicKeyBlock, _ := pem.Decode(publicPEM)
 	if publicKeyBlock == nil {
-		return nil, errors.New("Public ket data is not a valid PEM format")
+		return nil, errors.New("Public key data is not a valid PEM format")
 	}
 
 	publicKey, err := x509.ParsePKIXPublicKey(publicKeyBlock.Bytes)

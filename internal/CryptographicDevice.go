@@ -17,7 +17,7 @@ type CryptographicDevice interface {
 	GetKey() (*CryptographicKey, error)
 }
 
-// returns (private-key, public-key) or (shared-secret, nil) for symetric algorithms
+// returns (private-key, public-key) or (shared-secret, nil) for symmetric algorithms
 func (p CryptographicKey) ToPEM() ([]byte, []byte) {
 
 	privateKeyPEM := pem.EncodeToMemory(&pem.Block{
