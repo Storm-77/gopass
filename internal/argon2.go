@@ -1,6 +1,7 @@
 package crypto
 
 import (
+	"bytes"
 	"encoding/base64"
 	"errors"
 	"fmt"
@@ -28,7 +29,7 @@ type Argon2KeyDerivationDevice struct {
 
 	// methods
 	// GenHash(passphrase string) ([]byte , error)
-	// VerifyHash(passphrase string, reference string) (bool, error)
+	// VerifyHash(passphrase string, reference []byte) (bool, error)
 	// HashToString(key []byte) (string, error)
 	// ParamsToString() (string, error)
 
@@ -92,8 +93,10 @@ func (p *Argon2KeyDerivationDevice) ParamsToString() (string, error) {
 
 }
 
-func (p *Argon2KeyDerivationDevice) VerifyHash(passphrase string, reference string) (bool, error) {
-	return true, errors.ErrUnsupported // todo implement this
+// never errors out
+func (p *Argon2KeyDerivationDevice) VerifyHash(passphrase string, reference []byte) (bool, error) {
+	hash, _ := p.GenHash(passphrase)
+	return bytes.Equal(hash, reference), nil // todo implement this
 }
 
 func CreateArgonDeviceRandom(params Argon2Parameters) (*Argon2KeyDerivationDevice, error) {
@@ -157,4 +160,3 @@ func ParseArgon2Parameters(encoded string) (*Argon2Parameters, []byte, error) {
 		salt_bytes,
 		nil
 }
-

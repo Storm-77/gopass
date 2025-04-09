@@ -166,3 +166,58 @@ func TestArgonPartialStringRepresentation__ErrorHandling(t *testing.T) {
 		t.Error("value returned, expected nil")
 	}
 }
+
+func TestArgonKeyVerification(t *testing.T) {
+	config := TEST_ARGON2_PARAMETERS
+	device, err := crypto.CreateArgonDeviceRandom(config)
+
+	if err != nil {
+		t.Errorf("WTF: %s", err.Error())
+	}
+
+	key, _ := device.GenHash(TEST_ARGON2_PASSPHRASE)
+
+	if err != nil {
+		t.Errorf("received error generating key: %s", err.Error())
+	}
+
+	if len(key) == 0 {
+		t.Error("No key received, length=0")
+	}
+
+	str, err := device.HashToString(key)
+	if err != nil {
+		t.Errorf("WTF: %s", err.Error())
+	}
+
+	dev_2, hash, err := crypto.ParseHash(str)
+
+	if hash == nil {
+		t.Error("nil returned, must not be")
+	}
+
+	if dev_2 == nil {
+		t.Error("unexpected nil returned")
+	}
+
+	res, err := dev_2.VerifyHash(TEST_ARGON2_PASSPHRASE, hash)
+
+	if err != nil {
+		t.Errorf("WTF: %s", err.Error())
+	}
+
+	if res == false {
+		t.Error("Passkeys don't match when expected")
+	}
+
+	res, err = dev_2.VerifyHash(TEST_ARGON2_PASSPHRASE+"MESS IT UP string", hash)
+
+	if err != nil {
+		t.Errorf("WTF: %s", err.Error())
+	}
+
+	if res == true {
+		t.Error("Passkeys match when expected no to")
+	}
+
+}

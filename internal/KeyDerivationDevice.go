@@ -16,7 +16,7 @@ const (
 
 type KeyDerivationDevice interface {
 	GenHash(passphrase string) ([]byte, error)
-	VerifyHash(passphrase string, reference string) (bool, error)
+	VerifyHash(passphrase string, reference []byte) (bool, error)
 	HashToString(key []byte) (string, error)
 	ParamsToString() (string, error)
 }
