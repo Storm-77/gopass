@@ -158,37 +158,3 @@ func ParseArgon2Parameters(encoded string) (*Argon2Parameters, []byte, error) {
 		nil
 }
 
-// for now load config and sotore it in the same file
-// func ParseArgon2Hash(paramsStr string, hashStr string) (derived_key *Argon2DerivedKey, err error) {
-//
-// 	params, err := ParseArgon2Parameters(paramsStr)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-//
-// 	var b64hash string
-// 	n, err := fmt.Sscanf(hashStr, "hash@%s", &b64hash)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	if n == 1 { //we have hash
-// 		hash_bytes, err := base64.RawStdEncoding.DecodeString(b64hash)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 		return &Argon2DerivedKey{
-// 			data:          hash_bytes,
-// 			device_config: params,
-// 		}, nil
-//
-// 	}
-// 	if n == 0 {
-// 		//there is no hash, salt only
-// 		return &Argon2DerivedKey{
-// 			data:          nil,
-// 			device_config: params,
-// 		}, nil
-// 	}
-//
-// 	return nil, nil
-// }

@@ -27,30 +27,20 @@ var (
 )
 
 // returns KDD, hashBytes, error
+// hashBytes is null when no key is provided
 func ParseHash(encodedHash string) (KeyDerivationDevice, []byte, error) {
 	vals := strings.Split(encodedHash, "$")
 
-	if len(vals) != 3 {
+	vlen := len(vals)
+
+	// pass only when there are 2 or 3 parts in string
+	if vlen != 3 && vlen != 2 {
 		return nil, nil, ErrInvalidHash
 	}
 
-	{
-		metadata := strings.Split(vals[0], ":")
-
-		if len(metadata) != 2 {
-			return nil, nil, errors.New("Couldnt parse algorithm metadata, invalid format")
-		}
-
-		// determine algorithm version
-		algorithm := metadata[0]
-		version, err := strconv.ParseFloat(metadata[1], 32)
-
-		if err != nil {
-			return nil, nil, err
-		}
-
-		// check if there is hash and parse it
-		var hash_bytes []byte = nil
+	// check if there is hash and parse it
+	var hash_bytes []byte = nil
+	if vlen == 3 {
 
 		var b64hash string
 		n, err := fmt.Sscanf(vals[2], "hash@%s", &b64hash)
@@ -63,27 +53,41 @@ func ParseHash(encodedHash string) (KeyDerivationDevice, []byte, error) {
 				return nil, nil, err
 			}
 		}
-
-		// Instantiate corresponding device
-		switch algorithm {
-		case string(Algo_argon2):
-
-			if version != GetSupportedArgonVersion() {
-				return nil, nil, ErrIncompatibleVersion
-			}
-			params, salt, err := ParseArgon2Parameters(vals[1])
-			if err != nil {
-				return nil, nil, err
-			}
-			device, err := CreateArgonDeviceSalt(*params, salt)
-			if err != nil {
-				return nil, nil, err
-			}
-			return device, hash_bytes, nil
-
-		default:
-			return nil, nil, ErrIncompatibleAlgorithm
-		}
-
 	}
+
+	// parse metadata
+	metadata := strings.Split(vals[0], ":")
+
+	if len(metadata) != 2 {
+		return nil, nil, errors.New("Couldnt parse algorithm metadata, invalid format")
+	}
+
+	algorithm := metadata[0]
+	version, err := strconv.ParseFloat(metadata[1], 32)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// parse core parameters with corresponding device
+	switch algorithm {
+	case string(Algo_argon2):
+
+		if version != GetSupportedArgonVersion() {
+			return nil, nil, ErrIncompatibleVersion
+		}
+		params, salt, err := ParseArgon2Parameters(vals[1])
+		if err != nil {
+			return nil, nil, err
+		}
+		device, err := CreateArgonDeviceSalt(*params, salt)
+		if err != nil {
+			return nil, nil, err
+		}
+		return device, hash_bytes, nil
+
+	default:
+		return nil, nil, ErrIncompatibleAlgorithm
+	}
+
 }

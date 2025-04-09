@@ -1,8 +1,8 @@
 package crypto
 
 import (
-	"testing"
 	"github.com/Storm-77/gopass/internal"
+	"testing"
 )
 
 var TEST_ARGON2_PARAMETERS = crypto.Argon2Parameters{
@@ -125,11 +125,11 @@ func TestArgonPartialStringRepresentationParsing(t *testing.T) {
 }
 
 func TestArgonPartialStringRepresentation__OK(t *testing.T) {
-	str := "argon2:19$m@65536,i@3,p@2,kl@128,s@0F5lMVL8GW86aNYtkUu+VCGqAZTbY+wS3dmD++cgo88$hash@4cFWR8NrUoxyA6oyZgqJnC3q5fgA1Z9cimg96gilEspMbmyCN5Yl6ncM0dmtexIslEOiV9LdLbUKp37tR0Cgvv2OZubm/ysfEQGHe25uj7ErC+z+RG4PezB0ItG+RusdULHNBj9eZQrVnna9AZNJ1ybHQzLXFbwGEeP1dbUX4Y8"
+	str := "argon2:19$m@65536,i@3,p@2,kl@128,s@0F5lMVL8GW86aNYtkUu+VCGqAZTbY+wS3dmD++cgo88"
 	device, key, err := crypto.ParseHash(str)
 
-	if key == nil {
-		t.Error("nil returned, key not parsed")
+	if key != nil {
+		t.Error("not nil key returned when no key provided")
 	}
 
 	if err != nil {
@@ -138,5 +138,31 @@ func TestArgonPartialStringRepresentation__OK(t *testing.T) {
 
 	if device == nil {
 		t.Error("nil returned, params not parsed")
+	}
+
+	hash, _ := device.GenHash("HEllo there")
+	str_2, err := device.HashToString(hash)
+
+	if err != nil {
+		t.Errorf("WTF: %s", err.Error())
+	}
+
+	t.Logf("Hash string: %s", str_2)
+}
+
+func TestArgonPartialStringRepresentation__ErrorHandling(t *testing.T) {
+	str := "argon2:19$m@65536,i@3,p@2,kl@128"
+	device, key, err := crypto.ParseHash(str)
+
+	if key != nil {
+		t.Error("not nil key returned when no key provided")
+	}
+
+	if err == nil {
+		t.Error("received no error after invalid input")
+	}
+
+	if device != nil {
+		t.Error("value returned, expected nil")
 	}
 }
